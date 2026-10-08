@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ระบบแจ้งซ่อม | คณะสาธารณสุขศาสตร์ ม.บูรพา</title>
+  <meta name="description" content="ระบบแจ้งซ่อมออนไลน์ คณะสาธารณสุขศาสตร์ มหาวิทยาลัยบูรพา">
+  <meta name="theme-color" content="#1a56db">
+  <!-- ไอคอนแท็บ (ประแจ) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%231a56db'/><text x='50' y='68' font-size='56' text-anchor='middle'>🔧</text></svg>">
+  <!-- ตัวอย่างลิงก์ตอนแชร์ใน LINE / Facebook -->
+  <meta property="og:title" content="ระบบแจ้งซ่อม คณะสาธารณสุขศาสตร์ ม.บูรพา">
+  <meta property="og:description" content="แจ้งซ่อมอุปกรณ์ อาคารสถานที่ และคอมพิวเตอร์ ติดตามสถานะได้ทันที">
+  <style>
+    html,body{margin:0;padding:0;height:100%;overflow:hidden;background:#f0f4ff;font-family:'Noto Sans Thai',Tahoma,sans-serif;}
+    #app{position:fixed;inset:0;width:100%;height:100%;border:0;display:block;}
+    #loading{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:#f0f4ff;color:#475569;font-size:15px;transition:opacity .3s;z-index:2;}
+    #loading.hide{opacity:0;pointer-events:none;}
+    .spin{width:38px;height:38px;border:4px solid #dbe4ff;border-top-color:#1a56db;border-radius:50%;animation:s .8s linear infinite;}
+    @keyframes s{to{transform:rotate(360deg);}}
+    #fallback{display:none;font-size:13px;text-align:center;line-height:1.7;}
+    #fallback a{color:#1a56db;font-weight:600;}
+  </style>
+</head>
+<body>
+  <div id="loading">
+    <div class="spin"></div>
+    <div>กำลังเปิดระบบแจ้งซ่อม...</div>
+    <div id="fallback">ถ้ารอนานเกินไป <a id="directLink" href="#" target="_top">กดที่นี่เพื่อเปิดโดยตรง</a></div>
+  </div>
+  <iframe id="app" title="ระบบแจ้งซ่อม" allow="camera; clipboard-write; fullscreen"></iframe>
+
+  <script>
+    // ══════════════════════════════════════════════════════════
+    //  ใส่ URL ของ Web App (Deploy → Manage deployments → Web app URL)
+    //  ต้องลงท้ายด้วย /exec
+    // ══════════════════════════════════════════════════════════
+    var GAS_URL = 'https://script.google.com/macros/s/ใส่_DEPLOYMENT_ID_ตรงนี้/exec';
+
+    // ส่งต่อพารามิเตอร์จากลิงก์สั้น (?track=, ?rate=&k=, ?job=) เข้าไปใน Web App
+    var src = GAS_URL + (location.search || '');
+    var frame = document.getElementById('app');
+    var loading = document.getElementById('loading');
+    document.getElementById('directLink').href = src;
+
+    frame.addEventListener('load', function () { loading.classList.add('hide'); });
+    frame.src = src;
+
+    // ถ้าโหลดช้า (เน็ตช้า / เบราว์เซอร์บล็อก iframe) ให้มีลิงก์เปิดตรง
+    setTimeout(function () { document.getElementById('fallback').style.display = 'block'; }, 8000);
+  </script>
+</body>
+</html>
